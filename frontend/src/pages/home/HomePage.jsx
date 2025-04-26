@@ -247,7 +247,7 @@ export default function Dashboard() {
           <span className="text-2xl font-bold" style={{ color: platinumColors.primary }}>
             Arigo
           </span>
-          <span className="text-xs ml-1 bg-yellow-500 text-white px-1 py-0.5 rounded">.ng</span>
+          <span className="text-xs ml-1 bg-yellow-500 text-white px-1 py-0.5 rounded">hub</span>
         </Link>
       </motion.div>
 

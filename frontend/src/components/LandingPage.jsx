@@ -155,7 +155,7 @@ const LandingPage = () => {
                   repeatType: "reverse"
                 }}
               >
-                .ng
+                hub
               </motion.span>
             </motion.span>
           </motion.div>
