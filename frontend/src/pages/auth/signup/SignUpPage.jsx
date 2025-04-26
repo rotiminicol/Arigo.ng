@@ -83,7 +83,7 @@ const SignUpPage = () => {
               transition={{ delay: 0.3 }}
               className="text-3xl font-bold text-gray-900"
             >
-              Arigo<span className="text-green-600">.ng</span>
+              Arigo<span className="text-green-600">hub</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}

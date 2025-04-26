@@ -63,7 +63,7 @@
           <div className="w-full max-w-md mx-auto">
             <div className="text-center md:text-left mb-6">
               <h3 className="text-lg font-medium text-green-600">Welcome to</h3>
-              <h1 className="text-3xl font-bold text-gray-900">Arigo<span className="text-green-600">.ng</span></h1>
+              <h1 className="text-3xl font-bold text-gray-900">Arigo<span className="text-green-600">Hub</span></h1>
               <p className="mt-2 text-gray-600">Nigerias #1 Gadget Store</p>
             </div>
 
