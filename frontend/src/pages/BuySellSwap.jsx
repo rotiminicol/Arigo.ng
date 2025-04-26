@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { FaSearch, FaShoppingCart, FaHeart, FaStar, FaCheck, FaClock, FaMoneyBillWave, FaExchangeAlt } from "react-icons/fa"
+import { FaSearch, FaShoppingCart, FaHeart, FaStar, FaCheck, FaClock, FaMoneyBillWave, FaExchangeAlt, FaInstagram, FaTwitter, FaFacebookF, FaLinkedin } from "react-icons/fa"
 import { FiChevronDown, FiChevronRight } from "react-icons/fi"
 
 const BuySellSwap = () => {
@@ -258,6 +258,20 @@ const BuySellSwap = () => {
   const prevStep = () => {
     setCurrentStep(currentStep - 1)
   }
+    // Animation variants
+    const fadeIn = {
+      hidden: { opacity: 0, y: 30 },
+      visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+    }
+  
+    const stagger = {
+      visible: { transition: { staggerChildren: 0.15 } },
+    }
+  
+    const pulse = {
+      animate: { scale: [1, 1.1, 1], transition: { duration: 2, repeat: Infinity } },
+    }
+  
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -289,169 +303,310 @@ const BuySellSwap = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold" style={{ color: platinumColors.primary }}>Arigo</span>
-            <span className="text-xs ml-1 bg-yellow-500 text-white px-1 py-0.5 rounded">.ng</span>
-          </div>
-          <div className="hidden md:flex items-center space-x-6">
-            <a href="#" className="font-medium hover:text-green-600 transition">Home</a>
-            <a href="#" className="font-medium hover:text-green-600 transition">Products</a>
-            <a href="#" className="font-medium hover:text-green-600 transition">BuySellSwap</a>
-            <a href="#" className="font-medium hover:text-green-600 transition">About Us</a>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="p-2 hover:bg-gray-100 rounded-full">
-              <FaShoppingCart className="text-gray-600" />
-            </button>
-            <button className="p-2 hover:bg-gray-100 rounded-full">
-              <FaHeart className="text-gray-600" />
-            </button>
-          </div>
+    {/* Enhanced Header */}
+    <header className="w-full bg-gradient-to-r from-green-700 to-green-600 text-white py-3 md:py-4 relative shadow-lg">
+        {/* Floating decorative elements */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-green-400 rounded-full filter blur-[80px] opacity-20 animate-float-slow" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400 rounded-full filter blur-[80px] opacity-15 animate-float-medium" />
+        
+        <div className="container mx-auto px-4 flex justify-between items-center relative z-10">
+          {/* Logo */}
+          <motion.div
+            className="flex items-center"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <span
+              className="text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-white"
+            >
+              Arigo
+            </span>
+            <span className="text-xs ml-2 bg-yellow-500 text-white px-2 py-1 rounded-full font-semibold">
+              .ng
+            </span>
+          </motion.div>
+
+          {/* Cart and Wishlist Buttons */}
+          <motion.div
+            className="flex items-center space-x-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <motion.button
+              className="p-2 rounded-full bg-green-500/20 hover:bg-green-500/40 transition-colors"
+              whileHover={{ scale: 1.2, rotate: 10 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label="View cart"
+            >
+              <FaShoppingCart className="text-white text-lg" />
+            </motion.button>
+            <motion.button
+              className="p-2 rounded-full bg-green-500/20 hover:bg-green-500/40 transition-colors"
+              whileHover={{ scale: 1.2, rotate: -10 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label="View wishlist"
+            >
+              <FaHeart className="text-white text-lg" />
+            </motion.button>
+          </motion.div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+         {/* Enhanced Main Section */}
+      <main className="container mx-auto px-4 py-12 relative z-10">
         {currentStep === 1 && !showProductDetails && !showPlanDetails && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+            className="space-y-12"
           >
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold mb-2" style={{ color: platinumColors.dark }}>BuySellSwap Payment Plans</h1>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Get the gadgets you love today and pay in flexible installments. Choose from our range of products and payment plans.
-              </p>
-            </div>
+            {/* Hero Section */}
+            <motion.div
+              className="text-center"
+              variants={fadeIn}
+            >
+              <motion.h1
+                className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-yellow-400 mb-4"
+                variants={pulse}
+              >
+                BuySellSwap Payment Plans
+              </motion.h1>
+              <motion.p
+                className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+                variants={fadeIn}
+              >
+                Discover your dream gadgets and pay with flexible installments. Explore our curated selection and tailored plans.
+              </motion.p>
+            </motion.div>
 
-            <div className="mb-8">
-              <div className="relative max-w-md mx-auto">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              </div>
-            </div>
+            {/* Search Bar */}
+            <motion.div
+              className="relative max-w-lg mx-auto"
+              variants={fadeIn}
+              whileHover={{ y: -5, boxShadow: "0 10px 20px -5px rgba(0, 0, 0, 0.1)" }}
+            >
+              <input
+                type="text"
+                placeholder="Search for gadgets..."
+                className="w-full pl-12 pr-4 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 shadow-sm transition-all"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <motion.div
+                className="absolute left-4 top-1/2 transform -translate-y-1/2"
+                variants={pulse}
+              >
+                <FaSearch className="text-green-600 text-lg" />
+              </motion.div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
+            {/* Product Grid */}
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={stagger}
+            >
+              {filteredProducts.map((product, index) => (
                 <motion.div
                   key={product.id}
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition"
+                  className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden cursor-pointer border border-gray-100 hover:border-green-300 transition-all"
+                  variants={fadeIn}
+                  whileHover={{ y: -10, boxShadow: "0 15px 25px -5px rgba(0, 0, 0, 0.15)" }}
                   onClick={() => handleProductSelect(product)}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  role="button"
+                  aria-label={`Select ${product.name}`}
                 >
-                  <div className="h-48 bg-gray-100 flex items-center justify-center">
+                  <div className="h-56 bg-gray-50 flex items-center justify-center relative">
                     {product.image}
+                    <motion.div
+                      className="absolute top-3 right-3 bg-green-600 text-white rounded-full p-1.5"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <FaStar size={16} />
+                    </motion.div>
                   </div>
-                  <div className="p-4">
-                    <div className="flex justify-between items-start">
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="font-semibold">{product.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
                         <p className="text-gray-500 text-sm">{product.brand}</p>
                       </div>
                       <div className="flex items-center">
                         <FaStar className="text-yellow-400 mr-1" />
-                        <span>{product.rating}</span>
+                        <span className="text-gray-600 text-sm">{product.rating}</span>
                       </div>
                     </div>
-                    <div className="mt-3">
-                      <span className="font-bold text-lg" style={{ color: platinumColors.primary }}>
+                    <div className="mb-4">
+                      <span className="text-2xl font-bold" style={{ color: platinumColors.primary }}>
                         {product.price}
                       </span>
                     </div>
-                    <div className="mt-2 text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 mb-4">
                       <span>Available: {product.stock}</span>
                     </div>
-                    <button
-                      className="mt-4 w-full py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"
-                      style={{ backgroundColor: platinumColors.primary }}
+                    <motion.button
+                      className="w-full py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      style={{ background: `linear-gradient(to right, ${platinumColors.primary}, ${platinumColors.secondary})` }}
                     >
                       View Plans
-                    </button>
+                    </motion.button>
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         )}
 
         {showProductDetails && !showPlanDetails && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
           >
-            <div className="p-6">
-              <button
+            <div className="p-8 md:p-10">
+              <motion.button
                 onClick={() => {
                   setShowProductDetails(false)
                   setSelectedProduct(null)
                 }}
-                className="flex items-center text-blue-600 mb-4"
+                className="flex items-center text-green-600 mb-6 font-semibold"
+                whileHover={{ x: -5 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <FiChevronRight className="transform rotate-180 mr-1" /> Back to products
-              </button>
+                <FiChevronRight className="transform rotate-180 mr-2" /> Back to products
+              </motion.button>
 
-              <div className="md:flex gap-8">
-                <div className="md:w-1/2 mb-6 md:mb-0">
-                  <div className="bg-gray-100 rounded-lg h-64 md:h-80 flex items-center justify-center">
-                    {selectedProduct.image}
+              <div className="md:flex gap-10">
+                <motion.div
+                  className="md:w-1/2 mb-8 md:mb-0"
+                  variants={fadeIn}
+                >
+                  <div className="bg-gray-50 rounded-2xl h-80 md:h-96 flex items-center justify-center overflow-hidden relative">
+                    <motion.div
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {selectedProduct.image}
+                    </motion.div>
                   </div>
-                </div>
-                <div className="md:w-1/2">
-                  <h2 className="text-2xl font-bold mb-2">{selectedProduct.name}</h2>
-                  <p className="text-gray-500 mb-4">{selectedProduct.brand}</p>
-                  <div className="flex items-center mb-4">
+                </motion.div>
+                <motion.div
+                  className="md:w-1/2"
+                  variants={stagger}
+                >
+                  <motion.h2
+                    className="text-3xl font-extrabold text-gray-800 mb-3"
+                    variants={fadeIn}
+                  >
+                    {selectedProduct.name}
+                  </motion.h2>
+                  <motion.p
+                    className="text-gray-500 text-sm mb-4"
+                    variants={fadeIn}
+                  >
+                    {selectedProduct.brand}
+                  </motion.p>
+                  <motion.div
+                    className="flex items-center mb-6"
+                    variants={fadeIn}
+                  >
                     <div className="flex">
                       {[...Array(5)].map((_, i) => (
                         <FaStar
                           key={i}
-                          className={`${i < Math.floor(selectedProduct.rating) ? "text-yellow-400" : "text-gray-300"}`}
+                          className={`${i < Math.floor(selectedProduct.rating) ? "text-yellow-400" : "text-gray-300"} mr-1`}
                         />
                       ))}
                     </div>
-                    <span className="ml-2 text-gray-600">{selectedProduct.rating} ({selectedProduct.stock} available)</span>
-                  </div>
-                  <div className="mb-6">
-                    <span className="text-3xl font-bold" style={{ color: platinumColors.primary }}>
+                    <span className="ml-2 text-gray-600 text-sm">
+                      {selectedProduct.rating} ({selectedProduct.stock} available)
+                    </span>
+                  </motion.div>
+                  <motion.div
+                    className="mb-8"
+                    variants={fadeIn}
+                  >
+                    <span className="text-4xl font-bold" style={{ color: platinumColors.primary }}>
                       {selectedProduct.price}
                     </span>
-                  </div>
-                  <p className="text-gray-700 mb-6">{selectedProduct.description}</p>
+                  </motion.div>
+                  <motion.p
+                    className="text-gray-700 text-base mb-8 leading-relaxed"
+                    variants={fadeIn}
+                  >
+                    {selectedProduct.description}
+                  </motion.p>
 
-                  <h3 className="text-xl font-semibold mb-4" style={{ color: platinumColors.dark }}>Available Payment Plans</h3>
-                  <div className="space-y-4">
-                    {selectedProduct.paymentPlans.map((plan) => (
+                  <motion.h3
+                    className="text-2xl font-semibold mb-6"
+                    style={{ color: platinumColors.dark }}
+                    variants={fadeIn}
+                  >
+                    Available Payment Plans
+                  </motion.h3>
+                  <motion.div
+                    className="space-y-4"
+                    variants={stagger}
+                  >
+                    {selectedProduct.paymentPlans.map((plan, index) => (
                       <motion.div
                         key={plan.id}
-                        whileHover={{ scale: 1.02 }}
-                        className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-green-500 transition"
+                        className={`border border-gray-200 rounded-xl p-5 cursor-pointer transition-all ${
+                          selectedPlan?.id === plan.id
+                            ? "border-green-500 bg-green-50/50 shadow-md"
+                            : "hover:border-green-400 hover:bg-green-50/30"
+                        }`}
                         onClick={() => handlePlanSelect(plan)}
+                        variants={fadeIn}
+                        whileHover={{ y: -5, boxShadow: "0 10px 15px -5px rgba(0, 0, 0, 0.1)" }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                        role="button"
+                        aria-selected={selectedPlan?.id === plan.id}
                       >
+                        <AnimatePresence>
+                          {selectedPlan?.id === plan.id && (
+                            <motion.div
+                              className="absolute top-3 right-3 bg-green-600 text-white rounded-full p-1.5"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0 }}
+                              transition={{ type: "spring", stiffness: 300 }}
+                            >
+                              <FaCheck size={16} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                         <div className="flex justify-between items-center">
                           <div>
-                            <h4 className="font-medium">{plan.name}</h4>
+                            <h4 className="font-medium text-gray-800">{plan.name}</h4>
                             <p className="text-sm text-gray-500">{plan.duration} months</p>
                           </div>
                           <div className="text-right">
-                            <p className="font-medium" style={{ color: platinumColors.primary }}>{plan.monthlyPayment}/mo</p>
+                            <p className="font-semibold text-lg" style={{ color: platinumColors.primary }}>
+                              {plan.monthlyPayment}/mo
+                            </p>
                             <p className="text-sm text-gray-500">Total: {plan.total}</p>
                           </div>
                         </div>
                       </motion.div>
                     ))}
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
@@ -459,85 +614,123 @@ const BuySellSwap = () => {
 
         {showPlanDetails && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
           >
-            <div className="p-6">
-              <button
+            <div className="p-8 md:p-10">
+              <motion.button
                 onClick={() => {
                   setShowPlanDetails(false)
                   setSelectedPlan(null)
                 }}
-                className="flex items-center text-blue-600 mb-4"
+                className="flex items-center text-green-600 mb-6 font-semibold"
+                whileHover={{ x: -5 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <FiChevronRight className="transform rotate-180 mr-1" /> Back to plans
-              </button>
+                <FiChevronRight className="transform rotate-180 mr-2" /> Back to plans
+              </motion.button>
 
-              <div className="md:flex gap-8">
-                <div className="md:w-1/3 mb-6 md:mb-0">
-                  <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-4">
-                    {selectedProduct.image}
+              <div className="md:flex gap-10">
+                <motion.div
+                  className="md:w-1/3 mb-8 md:mb-0"
+                  variants={fadeIn}
+                >
+                  <div className="bg-gray-50 rounded-2xl h-64 flex items-center justify-center mb-4 overflow-hidden relative">
+                    <motion.div
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {selectedProduct.image}
+                    </motion.div>
                   </div>
-                  <h3 className="font-bold">{selectedProduct.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-800">{selectedProduct.name}</h3>
                   <p className="text-gray-500 text-sm mb-2">{selectedProduct.brand}</p>
-                  <p className="font-bold text-lg" style={{ color: platinumColors.primary }}>{selectedProduct.price}</p>
-                </div>
-                <div className="md:w-2/3">
-                  <h2 className="text-2xl font-bold mb-6" style={{ color: platinumColors.dark }}>Apply for {selectedPlan.name}</h2>
-                  
-                  <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold mb-3" style={{ color: platinumColors.primary }}>Plan Summary</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                  <p className="text-2xl font-bold" style={{ color: platinumColors.primary }}>
+                    {selectedProduct.price}
+                  </p>
+                </motion.div>
+                <motion.div
+                  className="md:w-2/3"
+                  variants={stagger}
+                >
+                  <motion.h2
+                    className="text-3xl font-extrabold text-gray-800 mb-6"
+                    variants={fadeIn}
+                  >
+                    Apply for {selectedPlan.name}
+                  </motion.h2>
+
+                  <motion.div
+                    className="bg-green-50/50 backdrop-blur-sm rounded-xl p-6 mb-8 border border-green-100"
+                    variants={fadeIn}
+                    whileHover={{ y: -5, boxShadow: "0 10px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                  >
+                    <h3 className="font-semibold text-lg mb-4" style={{ color: platinumColors.primary }}>
+                      Plan Summary
+                    </h3>
+                    <div className="grid grid-cols-2 gap-6">
                       <div>
                         <p className="text-sm text-gray-600">Monthly Payment</p>
-                        <p className="font-medium">{selectedPlan.monthlyPayment}</p>
+                        <p className="font-semibold text-gray-800">{selectedPlan.monthlyPayment}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Duration</p>
-                        <p className="font-medium">{selectedPlan.duration} months</p>
+                        <p className="font-semibold text-gray-800">{selectedPlan.duration} months</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Interest Rate</p>
-                        <p className="font-medium">{selectedPlan.interest}</p>
+                        <p className="font-semibold text-gray-800">{selectedPlan.interest}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Total Amount</p>
-                        <p className="font-medium">{selectedPlan.total}</p>
+                        <p className="font-semibold text-gray-800">{selectedPlan.total}</p>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div className="mb-6">
-                    <div className="flex items-center mb-4">
-                      <div className="flex-shrink-0 h-5 w-5 rounded-full bg-green-500 flex items-center justify-center mr-2">
-                        <FaCheck className="text-white text-xs" />
-                      </div>
-                      <p className="text-sm">First payment due upon approval</p>
-                    </div>
-                    <div className="flex items-center mb-4">
-                      <div className="flex-shrink-0 h-5 w-5 rounded-full bg-green-500 flex items-center justify-center mr-2">
-                        <FaCheck className="text-white text-xs" />
-                      </div>
-                      <p className="text-sm">Subsequent payments automatically deducted from your account</p>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-5 w-5 rounded-full bg-green-500 flex items-center justify-center mr-2">
-                        <FaCheck className="text-white text-xs" />
-                      </div>
-                      <p className="text-sm">Receive your product after first payment confirmation</p>
-                    </div>
-                  </div>
+                  <motion.div
+                    className="mb-8"
+                    variants={stagger}
+                  >
+                    {[
+                      "First payment due upon approval",
+                      "Subsequent payments automatically deducted from your account",
+                      "Receive your product after first payment confirmation",
+                    ].map((item, index) => (
+                      <motion.div
+                        key={index}
+                        className="flex items-center mb-4"
+                        variants={fadeIn}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                      >
+                        <motion.div
+                          className="flex-shrink-0 h-6 w-6 rounded-full bg-green-500 flex items-center justify-center mr-3"
+                          variants={pulse}
+                        >
+                          <FaCheck className="text-white text-sm" />
+                        </motion.div>
+                        <p className="text-gray-700 text-base">{item}</p>
+                      </motion.div>
+                    ))}
+                  </motion.div>
 
-                  <button
+                  <motion.button
                     onClick={() => setCurrentStep(2)}
-                    className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition"
-                    style={{ backgroundColor: platinumColors.primary }}
+                    className="w-full py-4 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    variants={fadeIn}
+                    style={{ background: `linear-gradient(to right, ${platinumColors.primary}, ${platinumColors.secondary})` }}
                   >
                     Apply Now
-                  </button>
-                </div>
+                  </motion.button>
+                </motion.div>
               </div>
             </div>
           </motion.div>
@@ -545,313 +738,384 @@ const BuySellSwap = () => {
 
         {currentStep > 1 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
           >
-            <div className="p-6">
+            <div className="p-8 md:p-10">
               {/* Progress Steps */}
-              <div className="flex justify-between mb-8 relative">
-                <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -z-10"></div>
-                <div
-                  className="absolute top-1/2 left-0 h-1 bg-green-500 -z-10 transition-all duration-300"
-                  style={{
-                    width: `${((currentStep - 1) / 3) * 100}%`,
-                    backgroundColor: platinumColors.primary
-                  }}
-                ></div>
-                {[1, 2, 3, 4].map((step) => (
-                  <div key={step} className="flex flex-col items-center">
+              <motion.div
+                className="flex justify-between mb-10 relative"
+                variants={stagger}
+              >
+                <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -z-10" />
+                <motion.div
+                  className="absolute top-1/2 left-0 h-1 bg-green-500 -z-10 transition-all duration-500"
+                  animate={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+                  style={{ backgroundColor: platinumColors.primary }}
+                />
+                {[1, 2, 3, 4].map((step, index) => (
+                  <motion.div
+                    key={step}
+                    className="flex flex-col items-center"
+                    variants={fadeIn}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
                     <div
-                      className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold ${
                         currentStep >= step
                           ? "bg-green-500 text-white"
                           : "bg-gray-200 text-gray-600"
-                      }`}
+                      } shadow-md`}
                       style={{ backgroundColor: currentStep >= step ? platinumColors.primary : "" }}
                     >
                       {step}
                     </div>
                     <span
-                      className={`mt-2 text-xs ${
-                        currentStep >= step ? "text-green-500 font-medium" : "text-gray-500"
+                      className={`mt-3 text-sm ${
+                        currentStep >= step ? "text-green-500 font-semibold" : "text-gray-500"
                       }`}
                       style={{ color: currentStep >= step ? platinumColors.primary : "" }}
                     >
                       {step === 1 ? "Product" : step === 2 ? "Personal" : step === 3 ? "Financial" : "Review"}
                     </span>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               <form onSubmit={handleSubmit}>
                 {currentStep === 2 && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                    initial="hidden"
+                    animate="visible"
+                    variants={stagger}
                   >
-                    <h2 className="text-xl font-bold mb-6" style={{ color: platinumColors.dark }}>Personal Information</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                      <div>
-                        <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                        <input
-                          type="text"
-                          id="fullName"
-                          name="fullName"
-                          value={formData.fullName}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.fullName ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.fullName && <p className="mt-1 text-xs text-red-600">{errors.fullName}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.email ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                        <input
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.phone ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
-                        <input
-                          type="text"
-                          id="address"
-                          name="address"
-                          value={formData.address}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.address ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.address && <p className="mt-1 text-xs text-red-600">{errors.address}</p>}
-                      </div>
-                    </div>
-                    <div className="flex justify-end">
-                      <button
+                    <motion.h2
+                      className="text-2xl font-extrabold text-gray-800 mb-8"
+                      variants={fadeIn}
+                      style={{ color: platinumColors.dark }}
+                    >
+                      Personal Information
+                    </motion.h2>
+                    <motion.div
+                      className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+                      variants={stagger}
+                    >
+                      {[
+                        { id: "fullName", label: "Full Name *", type: "text" },
+                        { id: "email", label: "Email *", type: "email" },
+                        { id: "phone", label: "Phone Number *", type: "tel" },
+                        { id: "address", label: "Address *", type: "text" },
+                      ].map((field, index) => (
+                        <motion.div
+                          key={field.id}
+                          variants={fadeIn}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                        >
+                          <label
+                            htmlFor={field.id}
+                            className="block text-sm font-medium text-gray-700 mb-2"
+                          >
+                            {field.label}
+                          </label>
+                          <input
+                            type={field.type}
+                            id={field.id}
+                            name={field.id}
+                            value={formData[field.id]}
+                            onChange={handleChange}
+                            className={`w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-800 shadow-sm transition-all ${
+                              errors[field.id] ? "border-red-500" : ""
+                            }`}
+                          />
+                          {errors[field.id] && (
+                            <p className="mt-1 text-xs text-red-600">{errors[field.id]}</p>
+                          )}
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                    <motion.div
+                      className="flex justify-end"
+                      variants={fadeIn}
+                    >
+                      <motion.button
                         type="button"
                         onClick={nextStep}
-                        className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"
-                        style={{ backgroundColor: platinumColors.primary }}
+                        className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{ background: `linear-gradient(to right, ${platinumColors.primary}, ${platinumColors.secondary})` }}
                       >
                         Next: Financial Information
-                      </button>
-                    </div>
+                      </motion.button>
+                    </motion.div>
                   </motion.div>
                 )}
 
                 {currentStep === 3 && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                    initial="hidden"
+                    animate="visible"
+                    variants={stagger}
                   >
-                    <h2 className="text-xl font-bold mb-6" style={{ color: platinumColors.dark }}>Financial Information</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                      <div>
-                        <label htmlFor="employmentStatus" className="block text-sm font-medium text-gray-700 mb-1">Employment Status *</label>
-                        <select
-                          id="employmentStatus"
-                          name="employmentStatus"
-                          value={formData.employmentStatus}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.employmentStatus ? "border-red-500" : "border-gray-300"
-                          }`}
+                    <motion.h2
+                      className="text-2xl font-extrabold text-gray-800 mb-8"
+                      variants={fadeIn}
+                      style={{ color: platinumColors.dark }}
+                    >
+                      Financial Information
+                    </motion.h2>
+                    <motion.div
+                      className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+                      variants={stagger}
+                    >
+                      {[
+                        {
+                          id: "employmentStatus",
+                          label: "Employment Status *",
+                          type: "select",
+                          options: [
+                            { value: "", label: "Select status" },
+                            { value: "Employed", label: "Employed" },
+                            { value: "Self-employed", label: "Self-employed" },
+                            { value: "Student", label: "Student" },
+                            { value: "Unemployed", label: "Unemployed" },
+                          ],
+                        },
+                        {
+                          id: "monthlyIncome",
+                          label: "Monthly Income (₦) *",
+                          type: "select",
+                          options: [
+                            { value: "", label: "Select income range" },
+                            { value: "0-50000", label: "₦0 - ₦50,000" },
+                            { value: "50000-100000", label: "₦50,000 - ₦100,000" },
+                            { value: "100000-200000", label: "₦100,000 - ₦200,000" },
+                            { value: "200000-500000", label: "₦200,000 - ₦500,000" },
+                            { value: "500000+", label: "₦500,000+" },
+                          ],
+                        },
+                        {
+                          id: "idType",
+                          label: "ID Type *",
+                          type: "select",
+                          options: [
+                            { value: "", label: "Select ID type" },
+                            { value: "National ID", label: "National ID" },
+                            { value: "Driver's License", label: "Driver's License" },
+                            { value: "Voter's Card", label: "Voter's Card" },
+                            { value: "International Passport", label: "International Passport" },
+                          ],
+                        },
+                        { id: "idNumber", label: "ID Number *", type: "text" },
+                      ].map((field, index) => (
+                        <motion.div
+                          key={field.id}
+                          variants={fadeIn}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
                         >
-                          <option value="">Select status</option>
-                          <option value="Employed">Employed</option>
-                          <option value="Self-employed">Self-employed</option>
-                          <option value="Student">Student</option>
-                          <option value="Unemployed">Unemployed</option>
-                        </select>
-                        {errors.employmentStatus && <p className="mt-1 text-xs text-red-600">{errors.employmentStatus}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="monthlyIncome" className="block text-sm font-medium text-gray-700 mb-1">Monthly Income (₦) *</label>
-                        <select
-                          id="monthlyIncome"
-                          name="monthlyIncome"
-                          value={formData.monthlyIncome}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.monthlyIncome ? "border-red-500" : "border-gray-300"
-                          }`}
-                        >
-                          <option value="">Select income range</option>
-                          <option value="0-50000">₦0 - ₦50,000</option>
-                          <option value="50000-100000">₦50,000 - ₦100,000</option>
-                          <option value="100000-200000">₦100,000 - ₦200,000</option>
-                          <option value="200000-500000">₦200,000 - ₦500,000</option>
-                          <option value="500000+">₦500,000+</option>
-                        </select>
-                        {errors.monthlyIncome && <p className="mt-1 text-xs text-red-600">{errors.monthlyIncome}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="idType" className="block text-sm font-medium text-gray-700 mb-1">ID Type *</label>
-                        <select
-                          id="idType"
-                          name="idType"
-                          value={formData.idType}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.idType ? "border-red-500" : "border-gray-300"
-                          }`}
-                        >
-                          <option value="">Select ID type</option>
-                          <option value="National ID">National ID</option>
-                          <option value="Driver's License">Drivers License</option>
-                          <option value="Voter's Card">Voters Card</option>
-                          <option value="International Passport">International Passport</option>
-                        </select>
-                        {errors.idType && <p className="mt-1 text-xs text-red-600">{errors.idType}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700 mb-1">ID Number *</label>
-                        <input
-                          type="text"
-                          id="idNumber"
-                          name="idNumber"
-                          value={formData.idNumber}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.idNumber ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.idNumber && <p className="mt-1 text-xs text-red-600">{errors.idNumber}</p>}
-                      </div>
-                    </div>
-                    <div className="flex justify-between">
-                      <button
+                          <label
+                            htmlFor={field.id}
+                            className="block text-sm font-medium text-gray-700 mb-2"
+                          >
+                            {field.label}
+                          </label>
+                          {field.type === "select" ? (
+                            <select
+                              id={field.id}
+                              name={field.id}
+                              value={formData[field.id]}
+                              onChange={handleChange}
+                              className={`w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-800 shadow-sm transition-all ${
+                                errors[field.id] ? "border-red-500" : ""
+                              }`}
+                            >
+                              {field.options.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          ) : (
+                            <input
+                              type={field.type}
+                              id={field.id}
+                              name={field.id}
+                              value={formData[field.id]}
+                              onChange={handleChange}
+                              className={`w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-800 shadow-sm transition-all ${
+                                errors[field.id] ? "border-red-500" : ""
+                              }`}
+                            />
+                          )}
+                          {errors[field.id] && (
+                            <p className="mt-1 text-xs text-red-600">{errors[field.id]}</p>
+                          )}
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                    <motion.div
+                      className="flex justify-between"
+                      variants={fadeIn}
+                    >
+                      <motion.button
                         type="button"
                         onClick={prevStep}
-                        className="px-6 py-2 bg-white hover:bg-gray-50 text-gray-700 font-medium border border-gray-300 rounded-md transition"
+                        className="px-8 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold border border-gray-200 rounded-xl shadow-sm transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         Back
-                      </button>
-                      <button
+                      </motion.button>
+                      <motion.button
                         type="button"
                         onClick={nextStep}
-                        className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"
-                        style={{ backgroundColor: platinumColors.primary }}
+                        className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{ background: `linear-gradient(to right, ${platinumColors.primary}, ${platinumColors.secondary})` }}
                       >
                         Next: Bank Details
-                      </button>
-                    </div>
+                      </motion.button>
+                    </motion.div>
                   </motion.div>
                 )}
 
                 {currentStep === 4 && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                    initial="hidden"
+                    animate="visible"
+                    variants={stagger}
                   >
-                    <h2 className="text-xl font-bold mb-6" style={{ color: platinumColors.dark }}>Bank Details</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                      <div>
-                        <label htmlFor="bankName" className="block text-sm font-medium text-gray-700 mb-1">Bank Name *</label>
-                        <input
-                          type="text"
-                          id="bankName"
-                          name="bankName"
-                          value={formData.bankName}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.bankName ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.bankName && <p className="mt-1 text-xs text-red-600">{errors.bankName}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 mb-1">Account Number *</label>
-                        <input
-                          type="text"
-                          id="accountNumber"
-                          name="accountNumber"
-                          value={formData.accountNumber}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 ${
-                            errors.accountNumber ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.accountNumber && <p className="mt-1 text-xs text-red-600">{errors.accountNumber}</p>}
-                      </div>
-                    </div>
+                    <motion.h2
+                      className="text-2xl font-extrabold text-gray-800 mb-8"
+                      variants={fadeIn}
+                      style={{ color: platinumColors.dark }}
+                    >
+                      Bank Details
+                    </motion.h2>
+                    <motion.div
+                      className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+                      variants={stagger}
+                    >
+                      {[
+                        { id: "bankName", label: "Bank Name *", type: "text" },
+                        { id: "accountNumber", label: "Account Number *", type: "text" },
+                      ].map((field, index) => (
+                        <motion.div
+                          key={field.id}
+                          variants={fadeIn}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                        >
+                          <label
+                            htmlFor={field.id}
+                            className="block text-sm font-medium text-gray-700 mb-2"
+                          >
+                            {field.label}
+                          </label>
+                          <input
+                            type={field.type}
+                            id={field.id}
+                            name={field.id}
+                            value={formData[field.id]}
+                            onChange={handleChange}
+                            className={`w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-800 shadow-sm transition-all ${
+                              errors[field.id] ? "border-red-500" : ""
+                            }`}
+                          />
+                          {errors[field.id] && (
+                            <p className="mt-1 text-xs text-red-600">{errors[field.id]}</p>
+                          )}
+                        </motion.div>
+                      ))}
+                    </motion.div>
 
-                    <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                      <h3 className="font-semibold mb-3" style={{ color: platinumColors.primary }}>Payment Plan Summary</h3>
+                    <motion.div
+                      className="bg-green-50/50 backdrop-blur-sm rounded-xl p-6 mb-8 border border-green-100"
+                      variants={fadeIn}
+                      whileHover={{ y: -5, boxShadow: "0 10px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                    >
+                      <h3 className="font-semibold text-lg mb-4" style={{ color: platinumColors.primary }}>
+                        Payment Plan Summary
+                      </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h4 className="font-medium mb-2">Product Details</h4>
-                          <div className="flex items-start mb-4">
-                            <div className="w-16 h-16 bg-gray-100 rounded-lg mr-4 flex-shrink-0 flex items-center justify-center">
-                              {selectedProduct.image}
+                          <h4 className="font-medium text-gray-800 mb-3">Product Details</h4>
+                          <motion.div
+                            className="flex items-start mb-4"
+                            variants={fadeIn}
+                          >
+                            <div className="w-20 h-20 bg-gray-50 rounded-xl mr-4 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                              <motion.div
+                                initial={{ scale: 1 }}
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.3 }}
+                              >
+                                {selectedProduct.image}
+                              </motion.div>
                             </div>
                             <div>
-                              <p className="font-medium">{selectedProduct.name}</p>
+                              <p className="font-semibold text-gray-800">{selectedProduct.name}</p>
                               <p className="text-sm text-gray-500">{selectedProduct.brand}</p>
-                              <p className="font-bold" style={{ color: platinumColors.primary }}>{selectedProduct.price}</p>
+                              <p className="font-bold text-lg" style={{ color: platinumColors.primary }}>
+                                {selectedProduct.price}
+                              </p>
                             </div>
-                          </div>
+                          </motion.div>
                         </div>
                         <div>
-                          <h4 className="font-medium mb-2">Plan Details</h4>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Plan:</span>
-                              <span>{selectedPlan.name}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Monthly Payment:</span>
-                              <span>{selectedPlan.monthlyPayment}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Duration:</span>
-                              <span>{selectedPlan.duration} months</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Interest Rate:</span>
-                              <span>{selectedPlan.interest}</span>
-                            </div>
-                            <div className="flex justify-between font-medium border-t border-gray-200 pt-2">
-                              <span>Total Amount:</span>
-                              <span>{selectedPlan.total}</span>
-                            </div>
-                          </div>
+                          <h4 className="font-medium text-gray-800 mb-3">Plan Details</h4>
+                          <motion.div
+                            className="space-y-3"
+                            variants={stagger}
+                          >
+                            {[
+                              { label: "Plan", value: selectedPlan.name },
+                              { label: "Monthly Payment", value: selectedPlan.monthlyPayment },
+                              { label: "Duration", value: `${selectedPlan.duration} months` },
+                              { label: "Interest Rate", value: selectedPlan.interest },
+                              { label: "Total Amount", value: selectedPlan.total, bold: true },
+                            ].map((item, index) => (
+                              <motion.div
+                                key={item.label}
+                                className="flex justify-between"
+                                variants={fadeIn}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.4, delay: index * 0.05 }}
+                              >
+                                <span className="text-gray-600">{item.label}:</span>
+                                <span className={item.bold ? "font-semibold text-gray-800" : "text-gray-800"}>
+                                  {item.value}
+                                </span>
+                              </motion.div>
+                            ))}
+                          </motion.div>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-                      <div className="flex">
-                        <div className="flex-shrink-0">
+                    <motion.div
+                      className="bg-yellow-50/80 backdrop-blur-sm border-l-4 border-yellow-400 p-6 mb-8 rounded-xl"
+                      variants={fadeIn}
+                      whileHover={{ y: -5, boxShadow: "0 10px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                    >
+                      <div className="flex items-start">
+                        <motion.div
+                          className="flex-shrink-0 mr-3"
+                          variants={pulse}
+                        >
                           <svg
-                            className="h-5 w-5 text-yellow-400"
+                            className="h-6 w-6 text-yellow-400"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
@@ -862,31 +1126,36 @@ const BuySellSwap = () => {
                               clipRule="evenodd"
                             />
                           </svg>
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-sm text-yellow-700">
-                            By submitting this application, you agree to automatic monthly deductions from your bank account for the duration of the payment plan.
-                          </p>
-                        </div>
+                        </motion.div>
+                        <p className="text-sm text-yellow-800 leading-relaxed">
+                          By submitting this application, you agree to automatic monthly deductions from your bank account for the duration of the payment plan.
+                        </p>
                       </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="flex justify-between">
-                      <button
+                    <motion.div
+                      className="flex justify-between"
+                      variants={fadeIn}
+                    >
+                      <motion.button
                         type="button"
                         onClick={prevStep}
-                        className="px-6 py-2 bg-white hover:bg-gray-50 text-gray-700 font-medium border border-gray-300 rounded-md transition"
+                        className="px-8 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold border border-gray-200 rounded-xl shadow-sm transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         Back
-                      </button>
-                      <button
+                      </motion.button>
+                      <motion.button
                         type="submit"
-                        className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"
-                        style={{ backgroundColor: platinumColors.primary }}
+                        className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{ background: `linear-gradient(to right, ${platinumColors.primary}, ${platinumColors.secondary})` }}
                       >
                         Submit Application
-                      </button>
-                    </div>
+                      </motion.button>
+                    </motion.div>
                   </motion.div>
                 )}
               </form>
@@ -895,72 +1164,167 @@ const BuySellSwap = () => {
         )}
       </main>
 
-      {/* Benefits Section */}
-      {currentStep === 1 && !showProductDetails && !showPlanDetails && (
-        <section className="bg-gray-100 py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8" style={{ color: platinumColors.dark }}>Why Choose BuySellSwap?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-lg shadow-md text-center"
+     {/* Enhanced Benefits Section */}
+     {currentStep === 1 && !showProductDetails && !showPlanDetails && (
+        <section className="py-16 relative bg-gradient-to-b from-green-50 to-white overflow-hidden">
+          {/* Floating decorative elements */}
+          <div className="absolute top-0 left-0 w-72 h-72 bg-green-400 rounded-full filter blur-[100px] opacity-20 animate-float-slow" />
+          <div className="absolute bottom-0 right-0 w-72 h-72 bg-yellow-400 rounded-full filter blur-[100px] opacity-15 animate-float-medium" />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              className="text-center mb-12"
+              initial="hidden"
+              animate="visible"
+              variants={fadeIn}
+            >
+              <motion.h2
+                className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-yellow-400 mb-4"
+                variants={pulse}
               >
-                <div className="flex justify-center mb-4">
-                  <div className="h-12 w-12 rounded-full flex items-center justify-center" style={{ backgroundColor: platinumColors.light }}>
-                    <FaMoneyBillWave className="text-xl" style={{ color: platinumColors.primary }} />
-                  </div>
-                </div>
-                <h3 className="font-semibold mb-2">Flexible Payments</h3>
-                <p className="text-gray-600 text-sm">Choose from 3, 6, or 12-month payment plans that fit your budget.</p>
-              </motion.div>
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-lg shadow-md text-center"
+                Why Choose BuySellSwap?
+              </motion.h2>
+              <motion.p
+                className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+                variants={fadeIn}
               >
-                <div className="flex justify-center mb-4">
-                  <div className="h-12 w-12 rounded-full flex items-center justify-center" style={{ backgroundColor: platinumColors.light }}>
-                    <FaClock className="text-xl" style={{ color: platinumColors.primary }} />
-                  </div>
-                </div>
-                <h3 className="font-semibold mb-2">Fast Approval</h3>
-                <p className="text-gray-600 text-sm">Get approved within 24 hours and receive your product immediately.</p>
-              </motion.div>
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-lg shadow-md text-center"
-              >
-                <div className="flex justify-center mb-4">
-                  <div className="h-12 w-12 rounded-full flex items-center justify-center" style={{ backgroundColor: platinumColors.light }}>
-                    <FaExchangeAlt className="text-xl" style={{ color: platinumColors.primary }} />
-                  </div>
-                </div>
-                <h3 className="font-semibold mb-2">Upgrade Anytime</h3>
-                <p className="text-gray-600 text-sm">Trade in your device and upgrade to newer models with ease.</p>
-              </motion.div>
-            </div>
+                Experience seamless shopping with flexible plans, rapid approvals, and easy upgrades tailored to your needs.
+              </motion.p>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              variants={stagger}
+            >
+              {[
+                {
+                  icon: <FaMoneyBillWave size={28} />,
+                  title: "Flexible Payments",
+                  description: "Choose from 3, 6, or 12-month payment plans that fit your budget seamlessly.",
+                },
+                {
+                  icon: <FaClock size={28} />,
+                  title: "Fast Approval",
+                  description: "Get approved within 24 hours and receive your product immediately.",
+                },
+                {
+                  icon: <FaExchangeAlt size={28} />,
+                  title: "Upgrade Anytime",
+                  description: "Trade in your device and upgrade to newer models with ease.",
+                },
+              ].map((benefit, index) => (
+                <motion.div
+                  key={benefit.title}
+                  className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-8 text-center border border-gray-100 hover:border-green-300 transition-all relative overflow-hidden"
+                  variants={fadeIn}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  whileHover={{
+                    y: -10,
+                    boxShadow: "0 15px 25px -5px rgba(0, 0, 0, 0.15)",
+                    borderColor: platinumColors.primary,
+                  }}
+                  viewport={{ once: true }}
+                  role="region"
+                  aria-label={benefit.title}
+                >
+                  {/* Subtle gradient overlay */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-yellow-50/50 opacity-0 hover:opacity-100 transition-opacity duration-300"
+                    style={{ zIndex: -1 }}
+                  />
+                  <motion.div
+                    className="flex justify-center mb-6"
+                    variants={pulse}
+                  >
+                    <div
+                      className="h-16 w-16 rounded-full flex items-center justify-center shadow-md"
+                      style={{ backgroundColor: platinumColors.light }}
+                    >
+                      <motion.div
+                        initial={{ rotate: 0 }}
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.5 }}
+                        style={{ color: platinumColors.primary }}
+                      >
+                        {benefit.icon}
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-3">{benefit.title}</h3>
+                  <p className="text-gray-600 text-base leading-relaxed">{benefit.description}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </section>
       )}
 
-      {/* FAQ Section */}
+
+      {/* Enhanced FAQ Section */}
       {currentStep === 1 && !showProductDetails && !showPlanDetails && (
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8" style={{ color: platinumColors.dark }}>Frequently Asked Questions</h2>
-            <div className="max-w-3xl mx-auto">
-              <div className="space-y-4">
+        <section className="py-16 relative bg-white/95 backdrop-blur-sm">
+          {/* Floating decorative elements */}
+          <div className="absolute top-0 left-0 w-80 h-80 bg-green-400 rounded-full filter blur-[100px] opacity-20 animate-float-slow" />
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-yellow-400 rounded-full filter blur-[100px] opacity-15 animate-float-medium" />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              className="text-center mb-12"
+              initial="hidden"
+              animate="visible"
+              variants={fadeIn}
+            >
+              <motion.h2
+                className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-yellow-400 mb-4"
+                variants={pulse}
+              >
+                Frequently Asked Questions
+              </motion.h2>
+              <motion.p
+                className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+                variants={fadeIn}
+              >
+                Find answers to common questions about our payment plans, approvals, and upgrade options.
+              </motion.p>
+            </motion.div>
+
+            <motion.div
+              className="max-w-4xl mx-auto"
+              variants={stagger}
+            >
+              <div className="space-y-6">
                 {faqs.map((faq, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+                  <motion.div
+                    key={index}
+                    className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 hover:border-green-300 transition-all overflow-hidden"
+                    variants={fadeIn}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    role="region"
+                    aria-labelledby={`faq-question-${index}`}
+                  >
                     <button
-                      className="w-full text-left p-4 font-medium flex justify-between items-center hover:bg-gray-50 transition"
+                      className="w-full text-left p-6 font-semibold text-gray-800 flex justify-between items-center hover:bg-green-50/50 transition-all"
                       onClick={() => {
                         const newFaqs = [...faqs]
                         newFaqs[index].open = !newFaqs[index].open
                         setFaqs(newFaqs)
                       }}
+                      aria-expanded={faq.open}
+                      aria-controls={`faq-answer-${index}`}
+                      id={`faq-question-${index}`}
                     >
-                      <span>{faq.question}</span>
-                      <FiChevronDown className={`transform transition ${faq.open ? "rotate-180" : ""}`} />
+                      <span className="text-lg pr-4">{faq.question}</span>
+                      <motion.div
+                        animate={{ rotate: faq.open ? 180 : 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <FiChevronDown className="text-green-600 text-xl" />
+                      </motion.div>
                     </button>
                     <AnimatePresence>
                       {faq.open && (
@@ -968,59 +1332,234 @@ const BuySellSwap = () => {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="px-4 pb-4 text-gray-600 text-sm"
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                          className="px-6 pb-6 pt-2 text-gray-600 text-base leading-relaxed bg-green-50/30"
+                          id={`faq-answer-${index}`}
                         >
                           {faq.answer}
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-bold mb-4">Arigo.ng</h3>
-              <p className="text-gray-400 text-sm">Nigerias premier destination for premium gadgets with flexible payment options.</p>
-            </div>
-            <div>
-              <h4 className="font-medium mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition">Home</a></li>
-                <li><a href="#" className="hover:text-white transition">Products</a></li>
-                <li><a href="#" className="hover:text-white transition">BuySellSwap</a></li>
-                <li><a href="#" className="hover:text-white transition">About Us</a></li>
+
+       {/* Enhanced Footer */}
+       <footer className="bg-gradient-to-b from-gray-900 to-green-900/95 py-12 relative text-white overflow-hidden">
+        {/* Floating decorative elements */}
+        <div className="absolute top-0 left-0 w-80 h-80 bg-green-400 rounded-full filter blur-[100px] opacity-20 animate-float-slow" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-yellow-400 rounded-full filter blur-[100px] opacity-15 animate-float-medium" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-4 gap-12"
+            variants={stagger}
+          >
+            {/* About Arigo.ng */}
+            <motion.div
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.h3
+                className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-white mb-4"
+                variants={pulse}
+              >
+                Arigo.ng
+              </motion.h3>
+              <p className="text-gray-300 text-base leading-relaxed">
+                Nigerias premier destination for premium gadgets with flexible payment options tailored to your lifestyle.
+              </p>
+              {/* Social Media Icons */}
+              <motion.div
+                className="flex space-x-4 mt-6"
+                variants={stagger}
+              >
+                {[
+                  { icon: <FaTwitter />, href: "#", label: "Twitter" },
+                  { icon: <FaInstagram />, href: "#", label: "Instagram" },
+                  { icon: <FaFacebookF />, href: "#", label: "Facebook" },
+                  { icon: <FaLinkedin />, href: "#", label: "LinkedIn" },
+                ].map((social, index) => (
+                  <motion.a
+                    key={social.label}
+                    href={social.href}
+                    className="p-2 rounded-full bg-green-500/20 hover:bg-green-500/40 text-gray-200 hover:text-white transition-all"
+                    variants={fadeIn}
+                    whileHover={{ scale: 1.2, rotate: 15 }}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label={`Follow us on ${social.label}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    {social.icon}
+                  </motion.a>
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* Quick Links */}
+            <motion.div
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
+              <ul className="space-y-3 text-base text-gray-300">
+                {[
+                  { label: "Home", href: "#" },
+                  { label: "Products", href: "#" },
+                  { label: "BuySellSwap", href: "#" },
+                  { label: "About Us", href: "#" },
+                ].map((link, index) => (
+                  <motion.li
+                    key={link.label}
+                    variants={fadeIn}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <a
+                      href={link.href}
+                      className="hover:text-yellow-300 transition-all flex items-center group"
+                      aria-label={link.label}
+                    >
+                      <motion.span
+                        className="mr-2 h-1.5 w-1.5 bg-green-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        whileHover={{ scale: 1.5 }}
+                      />
+                      {link.label}
+                    </a>
+                  </motion.li>
+                ))}
               </ul>
-            </div>
-            <div>
-              <h4 className="font-medium mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition">FAQs</a></li>
-                <li><a href="#" className="hover:text-white transition">Payment Plans</a></li>
-                <li><a href="#" className="hover:text-white transition">Returns Policy</a></li>
+            </motion.div>
+
+            {/* Support */}
+            <motion.div
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <h4 className="text-lg font-semibold text-white mb-4">Support</h4>
+              <ul className="space-y-3 text-base text-gray-300">
+                {[
+                  { label: "Contact Us", href: "#" },
+                  { label: "FAQs", href: "#" },
+                  { label: "Payment Plans", href: "#" },
+                  { label: "Returns Policy", href: "#" },
+                ].map((link, index) => (
+                  <motion.li
+                    key={link.label}
+                    variants={fadeIn}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <a
+                      href={link.href}
+                      className="hover:text-yellow-300 transition-all flex items-center group"
+                      aria-label={link.label}
+                    >
+                      <motion.span
+                        className="mr-2 h-1.5 w-1.5 bg-green-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        whileHover={{ scale: 1.5 }}
+                      />
+                      {link.label}
+                    </a>
+                  </motion.li>
+                ))}
               </ul>
-            </div>
-            <div>
-              <h4 className="font-medium mb-4">Contact</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>Lagos, Nigeria</li>
-                <li>hello@arigo.ng</li>
-                <li>+234 800 000 0000</li>
+            </motion.div>
+
+            {/* Contact */}
+            <motion.div
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <h4 className="text-lg font-semibold text-white mb-4">Contact</h4>
+              <ul className="space-y-3 text-base text-gray-300">
+                {[
+                  { label: "Lagos, Nigeria", icon: null },
+                  { label: "hello@arigo.ng", icon: null, href: "mailto:hello@arigo.ng" },
+                  { label: "+234 800 000 0000", icon: null, href: "tel:+2348000000000" },
+                ].map((item, index) => (
+                  <motion.li
+                    key={item.label}
+                    variants={fadeIn}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        className="hover:text-yellow-300 transition-all flex items-center group"
+                        aria-label={item.label}
+                      >
+                        <motion.span
+                          className="mr-2 h-1.5 w-1.5 bg-green-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          whileHover={{ scale: 1.5 }}
+                        />
+                        {item.label}
+                      </a>
+                    ) : (
+                      <span className="flex items-center">
+                        <motion.span
+                          className="mr-2 h-1.5 w-1.5 bg-green-500 rounded-full"
+                          whileHover={{ scale: 1.5 }}
+                        />
+                        {item.label}
+                      </span>
+                    )}
+                  </motion.li>
+                ))}
               </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>© {new Date().getFullYear()} Arigo.ng. All rights reserved.</p>
-          </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="border-t border-gray-700 mt-12 pt-8 text-center text-base text-gray-300"
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <p>
+              © {new Date().getFullYear()} Arigo.ng. All rights reserved.
+              <motion.a
+                href="#"
+                className="ml-2 text-green-400 hover:text-yellow-300 transition-all"
+                whileHover={{ scale: 1.1 }}
+                aria-label="Privacy Policy"
+              >
+                Privacy Policy
+              </motion.a>
+              {" | "}
+              <motion.a
+                href="#"
+                className="text-green-400 hover:text-yellow-300 transition-all"
+                whileHover={{ scale: 1.1 }}
+                aria-label="Terms of Service"
+              >
+                Terms of Service
+              </motion.a>
+            </p>
+          </motion.div>
         </div>
       </footer>
     </div>

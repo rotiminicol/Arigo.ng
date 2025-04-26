@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const laptops = [
   {
@@ -112,10 +114,12 @@ const laptops = [
 ];
 
 const Laptops = () => {
+  const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
   const [category, setCategory] = useState('all');
   const [visibleCount, setVisibleCount] = useState(6);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
@@ -133,230 +137,330 @@ const Laptops = () => {
   const visibleLaptops = filteredLaptops.slice(0, visibleCount);
   
   const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 6, filteredLaptops.length));
+    setIsLoading(true);
+    setTimeout(() => {
+      setVisibleCount(prev => Math.min(prev + 6, filteredLaptops.length));
+      setIsLoading(false);
+    }, 800);
   };
 
+  // Scroll to top when category changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [category]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white py-16 relative overflow-hidden">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white py-16 relative overflow-hidden"
+    >
       {/* Background Animation */}
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 animate-pulse"></div>
+      <motion.div 
+        className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"
+        animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+      />
       <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-emerald-500/20 to-teal-500/20"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <h1 className="text-5xl md:text-7xl font-extrabold text-center mb-8">
+        {/* Back Button */}
+        <motion.button
+          onClick={() => navigate(-1)}
+          whileHover={{ x: -5 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 mb-8 text-gray-300 hover:text-white transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Previous Page
+        </motion.button>
+
+        <motion.h1 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-5xl md:text-7xl font-extrabold text-center mb-8"
+        >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-400">
             Premium Laptop Collection
           </span>
-        </h1>
+        </motion.h1>
         
-        <p className="text-lg md:text-xl text-center mb-8 text-gray-200">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-lg md:text-xl text-center mb-8 text-gray-200"
+        >
           Discover cutting-edge performance with our exclusive laptop selection
-        </p>
+        </motion.p>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <button 
-            onClick={() => { setCategory('all'); setVisibleCount(6); }}
-            className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 ${
-              category === 'all' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            All Laptops
-          </button>
-          <button 
-            onClick={() => { setCategory('premium'); setVisibleCount(6); }}
-            className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 ${
-              category === 'premium' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            Premium ($1800+)
-          </button>
-          <button 
-            onClick={() => { setCategory('midrange'); setVisibleCount(6); }}
-            className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 ${
-              category === 'midrange' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            Mid-Range ($1200-$1800)
-          </button>
-          <button 
-            onClick={() => { setCategory('budget'); setVisibleCount(6); }}
-            className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 ${
-              category === 'budget' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            Budget (Under $1200)
-          </button>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="flex flex-wrap justify-center gap-4 mb-12"
+        >
+          {[
+            { id: 'all', label: 'All Laptops' },
+            { id: 'premium', label: 'Premium ($1800+)' },
+            { id: 'midrange', label: 'Mid-Range ($1200-$1800)' },
+            { id: 'budget', label: 'Budget (Under $1200)' }
+          ].map((filter) => (
+            <motion.button
+              key={filter.id}
+              onClick={() => { setCategory(filter.id); setVisibleCount(6); }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                category === filter.id 
+                  ? 'bg-green-500 text-white shadow-lg' 
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              {filter.label}
+            </motion.button>
+          ))}
+        </motion.div>
 
         {/* Laptop Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {visibleLaptops.map((laptop) => (
-            <div
-              key={laptop.id}
-              className={`bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden transition-all duration-500 ${
-                expandedId === laptop.id ? 'transform scale-105 shadow-green-500/50 shadow-xl' : 'hover:shadow-green-500/30 hover:shadow-lg'
-              }`}
-              onMouseEnter={() => setHoveredId(laptop.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <div className="relative">
-                <img
-                  src={laptop.image}
-                  alt={`${laptop.brand} ${laptop.model}`}
-                  className={`w-full h-56 object-cover transition-transform duration-700 ${
-                    hoveredId === laptop.id ? 'transform scale-110' : ''
-                  }`}
-                  onError={(e) => {
-                    e.target.src = '/api/placeholder/400/320';
-                  }}
-                />
-                <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  In Stock
-                </div>
-                {laptop.price >= 2000 && (
-                  <div className="absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                    Premium
-                  </div>
-                )}
-                {hoveredId === laptop.id && (
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                    <button
-                      onClick={() => toggleExpand(laptop.id)}
-                      className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300"
-                    >
-                      {expandedId === laptop.id ? 'Less Info' : 'More Info'}
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-2xl font-bold text-gray-100">
-                    {laptop.brand} {laptop.model}
-                  </h3>
-                  <span className="text-xl font-bold text-green-400">
-                    ${laptop.price.toLocaleString()}
-                  </span>
-                </div>
-                
-                <p className="text-sm text-gray-400 mb-4">{laptop.specs}</p>
-                
-                {/* Expandable Description */}
-                <div
-                  className={`overflow-hidden transition-all duration-500 ${
-                    expandedId === laptop.id ? 'max-h-96' : 'max-h-0'
-                  }`}
-                >
-                  <div className="bg-gray-800/50 p-4 rounded-lg mb-4">
-                    <h4 className="text-green-400 font-semibold mb-2">Description</h4>
-                    <p className="text-gray-300 text-sm">{laptop.description}</p>
-                  </div>
+          <AnimatePresence>
+            {visibleLaptops.map((laptop) => (
+              <motion.div
+                key={laptop.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ type: "spring", damping: 20, stiffness: 300 }}
+                className={`bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden ${
+                  expandedId === laptop.id ? 'transform scale-[1.02] z-10' : ''
+                }`}
+                onMouseEnter={() => setHoveredId(laptop.id)}
+                onMouseLeave={() => setHoveredId(null)}
+              >
+                <div className="relative h-56 overflow-hidden">
+                  <motion.img
+                    src={laptop.image}
+                    alt={`${laptop.brand} ${laptop.model}`}
+                    className="w-full h-full object-cover"
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                      opacity: 1,
+                      scale: hoveredId === laptop.id ? 1.1 : 1
+                    }}
+                    transition={{ duration: 0.5 }}
+                  />
                   
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-400">Processor</p>
-                      <p className="text-sm text-gray-200 font-medium">{laptop.specs.split(',')[0]}</p>
-                    </div>
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-400">Memory</p>
-                      <p className="text-sm text-gray-200 font-medium">{laptop.specs.split(',')[1]}</p>
-                    </div>
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-400">Storage</p>
-                      <p className="text-sm text-gray-200 font-medium">{laptop.specs.split(',')[2]}</p>
-                    </div>
-                    <div className="bg-gray-800/50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-400">Warranty</p>
-                      <p className="text-sm text-gray-200 font-medium">1 Year</p>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gray-800/50 p-3 rounded-lg mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="bg-green-500 h-3 w-3 rounded-full"></div>
-                      <p className="text-xs text-gray-300">Free Shipping</p>
-                    </div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="bg-green-500 h-3 w-3 rounded-full"></div>
-                      <p className="text-xs text-gray-300">30-Day Returns</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="bg-green-500 h-3 w-3 rounded-full"></div>
-                      <p className="text-xs text-gray-300">24/7 Tech Support</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex gap-2">
-                  <button
-                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 rounded-lg font-bold hover:from-green-600 hover:to-emerald-600 transition-all duration-300 flex items-center justify-center gap-2"
-                    aria-label={`Add ${laptop.brand} ${laptop.model} to cart`}
+                  <motion.div 
+                    className="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2 }}
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                    Add to Cart
-                  </button>
+                    In Stock
+                  </motion.div>
                   
-                  <button
-                    onClick={() => toggleExpand(laptop.id)}
-                    className="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-lg transition-colors duration-300"
-                    aria-label={expandedId === laptop.id ? 'Show less details' : 'Show more details'}
-                  >
-                    {expandedId === laptop.id ? (
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path>
-                      </svg>
-                    ) : (
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
+                  {laptop.price >= 2000 && (
+                    <motion.div 
+                      className="absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Premium
+                    </motion.div>
+                  )}
+                  
+                  <AnimatePresence>
+                    {hoveredId === laptop.id && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 bg-black/30 flex items-center justify-center"
+                      >
+                        <motion.button
+                          onClick={() => toggleExpand(laptop.id)}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300"
+                        >
+                          {expandedId === laptop.id ? 'Less Info' : 'More Info'}
+                        </motion.button>
+                      </motion.div>
                     )}
-                  </button>
+                  </AnimatePresence>
                 </div>
-              </div>
-            </div>
-          ))}
+
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <motion.h3 
+                      className="text-2xl font-bold text-gray-100"
+                      whileHover={{ color: '#4ade80' }}
+                    >
+                      {laptop.brand} {laptop.model}
+                    </motion.h3>
+                    <motion.span 
+                      className="text-xl font-bold text-green-400"
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      ${laptop.price.toLocaleString()}
+                    </motion.span>
+                  </div>
+                  
+                  <p className="text-sm text-gray-400 mb-4">{laptop.specs}</p>
+                  
+                  {/* Expandable Description */}
+                  <AnimatePresence>
+                    {expandedId === laptop.id && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <motion.div 
+                          className="bg-gray-800/50 p-4 rounded-lg mb-4"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          <h4 className="text-green-400 font-semibold mb-2">Description</h4>
+                          <p className="text-gray-300 text-sm">{laptop.description}</p>
+                        </motion.div>
+                        
+                        <motion.div 
+                          className="grid grid-cols-2 gap-2 mb-4"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.3 }}
+                        >
+                          {[
+                            { label: "Processor", value: laptop.specs.split(',')[0] },
+                            { label: "Memory", value: laptop.specs.split(',')[1] },
+                            { label: "Storage", value: laptop.specs.split(',')[2] },
+                            { label: "Warranty", value: "1 Year" }
+                          ].map((spec, i) => (
+                            <motion.div
+                              key={i}
+                              className="bg-gray-800/50 p-3 rounded-lg"
+                              whileHover={{ y: -2 }}
+                            >
+                              <p className="text-xs text-gray-400">{spec.label}</p>
+                              <p className="text-sm text-gray-200 font-medium">{spec.value}</p>
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                        
+                        <motion.div 
+                          className="bg-gray-800/50 p-3 rounded-lg mb-4"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.4 }}
+                        >
+                          {[
+                            "Free Shipping",
+                            "30-Day Returns",
+                            "24/7 Tech Support"
+                          ].map((benefit, i) => (
+                            <motion.div
+                              key={i}
+                              className="flex items-center gap-2 mb-2 last:mb-0"
+                              initial={{ x: -10 }}
+                              animate={{ x: 0 }}
+                              transition={{ delay: 0.5 + i * 0.1 }}
+                            >
+                              <div className="bg-green-500 h-3 w-3 rounded-full"></div>
+                              <p className="text-xs text-gray-300">{benefit}</p>
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  
+                  <div className="flex gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 rounded-lg font-bold hover:from-green-600 hover:to-emerald-600 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      Add to Cart
+                    </motion.button>
+                    
+                    <motion.button
+                      onClick={() => toggleExpand(laptop.id)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-lg transition-all duration-300"
+                    >
+                      {expandedId === laptop.id ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      )}
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
         
         {/* Load More Button */}
         {visibleCount < filteredLaptops.length && (
-          <div className="flex justify-center mt-12">
-            <button
+          <motion.div 
+            className="flex justify-center mt-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            <motion.button
               onClick={loadMore}
+              disabled={isLoading}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-lg transition-all duration-300 flex items-center gap-2"
             >
-              Load More Laptops
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-          </div>
+              {isLoading ? (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                  />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  Load More Laptops
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </>
+              )}
+            </motion.button>
+          </motion.div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-export default Laptops;
+export default Laptops; 

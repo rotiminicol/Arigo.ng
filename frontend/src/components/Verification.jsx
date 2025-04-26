@@ -6,14 +6,15 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useQueryClient } from "@tanstack/react-query"
 import { motion, AnimatePresence } from "framer-motion"
 
-// Company theme colors
+// Green and white theme colors
 const COLORS = {
-  primary: "#0F4C81", // Deep blue as primary color
-  secondary: "#FF6B35", // Vibrant orange as accent
-  success: "#2E8B57", // Sea green for success states
-  background: "#F8FAFC", // Light blue-gray background
-  text: "#1E293B", // Dark blue-gray for text
-  lightText: "#64748B", // Lighter text for secondary information
+  primary: "#2E8B57",       // Sea green
+  secondary: "#3CB371",     // Medium sea green
+  accent: "#228B22",        // Forest green
+  success: "#2E8B57",       // Success green
+  background: "#F8FFF8",    // Very light green
+  text: "#1A3E1A",         // Dark green
+  lightText: "#5A7D5A",     // Light green
 }
 
 const Verification = () => {
@@ -24,73 +25,132 @@ const Verification = () => {
   const [verificationCode, setVerificationCode] = useState("")
   const [step, setStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
-  const [ setIsVerified] = useState(false)
+  const [isVerified, setIsVerified] = useState(false)
   const [countdown, setCountdown] = useState(30)
   const [canResend, setCanResend] = useState(false)
+  const [error, setError] = useState("")
+  const [serverCode, setServerCode] = useState("") // Stores the code sent by server
   const timerRef = useRef(null)
   
-
   // Check authentication status on mount
   const authUserData = queryClient.getQueryData(["authUser"])
   const authUser = authUserData?.data || {}
 
+  // Generate a random 6-digit code for simulation
+  const generateVerificationCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString()
+  }
+
   useEffect(() => {
-    if (authUser?.isVerified) {
+    if (authUser?.isVerified || isVerified) {
       navigate("/dashboard")
     }
 
-    // If email is not provided in state, redirect to previous page
     if (step === 1 && !state?.email && !email) {
-      // You might want to redirect to a specific page instead
-      // navigate(-1);
+      navigate("/login")
     }
 
-    // Cleanup timer on unmount
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current)
       }
     }
-  }, [authUser, navigate, state, email, step])
+  }, [authUser, isVerified, navigate, state, email, step])
 
-  const handleSendCode = (e) => {
+  const handleSendCode = async (e) => {
     e.preventDefault()
+    setError("")
     setIsLoading(true)
-    setTimeout(() => {
+    
+    try {
+      // Simulate API call to send verification code
+      const generatedCode = generateVerificationCode()
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // In a real app, you would:
+      // 1. Call your backend API to send the code
+      // 2. The backend would send the email with code
+      // 3. You would store the code reference (or hash) for verification
+      
+      // For demo, we'll store the code in state
+      setServerCode(generatedCode)
+      console.log("Verification code sent:", generatedCode) // For testing
+      
       setIsLoading(false)
       setStep(2)
       startCountdown()
-    }, 1500)
-  }
-
-  const handleVerifyCode = (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setTimeout(() => {
+    } catch (err) {
       setIsLoading(false)
-      setIsVerified(true)
-      setStep(3)
-      queryClient.invalidateQueries({ queryKey: ["authUser"] })
-    }, 1500)
+      setError(err.message || "Failed to send verification code")
+    }
   }
 
-  const handleResendCode = () => {
+  const handleVerifyCode = async (e) => {
+    e.preventDefault()
+    setError("")
+    setIsLoading(true)
+    
+    try {
+      // Simulate API verification delay
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // In a real app, you would:
+      // const response = await api.verifyCode(email, verificationCode);
+      // if (!response.success) throw new Error(response.message);
+      
+      // For demo, we'll compare with the generated code
+      if (verificationCode.length !== 6) {
+        throw new Error("Please enter a valid 6-digit code")
+      }
+      
+      if (verificationCode !== serverCode) {
+        throw new Error("Invalid verification code. Please try again.")
+      }
+      
+      // Mark as verified
+      setIsVerified(true)
+      setIsLoading(false)
+      setStep(3)
+      
+      // In a real app, you would update the user's verified status
+      queryClient.invalidateQueries({ queryKey: ["authUser"] })
+      
+    } catch (err) {
+      setIsLoading(false)
+      setError(err.message || "Verification failed. Please try again.")
+    }
+  }
+
+  const handleResendCode = async () => {
     if (!canResend) return
+    
+    setError("")
     setIsLoading(true)
     setCanResend(false)
-    setTimeout(() => {
+    
+    try {
+      // Generate new code
+      const newCode = generateVerificationCode()
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // Update the server code
+      setServerCode(newCode)
+      console.log("New verification code sent:", newCode) // For testing
+      
       setIsLoading(false)
       startCountdown()
-      // Clear verification code on resend
       setVerificationCode("")
-    }, 1500)
+    } catch (err) {
+      setIsLoading(false)
+      setError(err.message || "Failed to resend code")
+      setCanResend(true)
+    }
   }
 
   const startCountdown = () => {
     setCountdown(30)
     setCanResend(false)
 
-    // Clear any existing timer
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
@@ -112,6 +172,7 @@ const Verification = () => {
     const value = e.target.value
     if (value.length <= 6 && /^\d*$/.test(value)) {
       setVerificationCode(value)
+      setError("")
     }
   }
 
@@ -122,19 +183,9 @@ const Verification = () => {
   const handleGoBack = () => {
     if (step > 1) {
       setStep(step - 1)
+      setError("")
     } else {
       navigate(-1)
-    }
-  }
-
-  // For demo purposes, ensure all steps can be seen
-  const simulateStepChange = (nextStep) => {
-    setStep(nextStep)
-    if (nextStep === 2) {
-      startCountdown()
-    }
-    if (nextStep === 3) {
-      setIsVerified(true)
     }
   }
 
@@ -148,8 +199,8 @@ const Verification = () => {
         <div className="flex items-center justify-center">
           <div className="text-2xl font-bold flex items-center" style={{ color: COLORS.primary }}>
             <Shield className="w-8 h-8 mr-2" />
-            <span>ARIGO</span>
-            <span style={{ color: COLORS.secondary }}>.NG</span>
+            <span>ECO</span>
+            <span style={{ color: COLORS.accent }}>VERSE</span>
           </div>
         </div>
       </div>
@@ -158,7 +209,7 @@ const Verification = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8 relative"
+        className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8 relative"
         style={{ borderTop: `4px solid ${COLORS.primary}` }}
       >
         {/* Back button */}
@@ -197,45 +248,23 @@ const Verification = () => {
               style={{
                 height: "100%",
                 borderRadius: "9999px",
-                background: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.secondary})`,
+                background: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.accent})`,
               }}
             />
           </div>
         </div>
 
-        {/* For demo purposes - can be removed in production */}
-        <div className="mb-6 flex justify-center gap-2">
-          <button
-            onClick={() => simulateStepChange(1)}
-            className="px-3 py-1 rounded text-xs"
-            style={{
-              backgroundColor: step === 1 ? COLORS.primary : "#e5e7eb",
-              color: step === 1 ? "white" : COLORS.text,
-            }}
+        {/* Error message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 rounded-lg text-sm font-medium"
+            style={{ backgroundColor: "#FFEBEE", color: "#C62828" }}
           >
-            Step 1
-          </button>
-          <button
-            onClick={() => simulateStepChange(2)}
-            className="px-3 py-1 rounded text-xs"
-            style={{
-              backgroundColor: step === 2 ? COLORS.primary : "#e5e7eb",
-              color: step === 2 ? "white" : COLORS.text,
-            }}
-          >
-            Step 2
-          </button>
-          <button
-            onClick={() => simulateStepChange(3)}
-            className="px-3 py-1 rounded text-xs"
-            style={{
-              backgroundColor: step === 3 ? COLORS.primary : "#e5e7eb",
-              color: step === 3 ? "white" : COLORS.text,
-            }}
-          >
-            Step 3
-          </button>
-        </div>
+            {error}
+          </motion.div>
+        )}
 
         <AnimatePresence mode="wait">
           {/* Step 1: Enter Email */}
@@ -286,7 +315,7 @@ const Verification = () => {
                   disabled={isLoading || !email}
                   className="w-full py-3 px-4 flex items-center justify-center rounded-lg text-white font-medium transition-all text-base"
                   style={{
-                    backgroundColor: isLoading || !email ? `${COLORS.primary}60` : COLORS.primary,
+                    backgroundColor: isLoading || !email ? `${COLORS.primary}80` : COLORS.primary,
                     cursor: isLoading || !email ? "not-allowed" : "pointer",
                   }}
                 >
@@ -324,7 +353,7 @@ const Verification = () => {
                 Enter Verification Code
               </h2>
               <p className="text-sm sm:text-base text-center mb-6" style={{ color: COLORS.lightText }}>
-                We sent a 6-digit code to <span style={{ color: COLORS.secondary, fontWeight: 500 }}>{email}</span>
+                We sent a 6-digit code to <span style={{ color: COLORS.accent, fontWeight: 500 }}>{email}</span>
               </p>
               <form onSubmit={handleVerifyCode}>
                 <div className="mb-6">
@@ -340,7 +369,7 @@ const Verification = () => {
                       onChange={handlePinChange}
                       className="w-full text-center tracking-widest text-xl px-4 py-3 border rounded-lg outline-none transition-all placeholder-gray-400"
                       style={{
-                        borderColor: `${COLORS.primary}40`,
+                        borderColor: error ? "#EF5350" : `${COLORS.primary}40`,
                         color: COLORS.text,
                         letterSpacing: "0.5em",
                         boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
@@ -366,27 +395,33 @@ const Verification = () => {
                 <button
                   type="submit"
                   disabled={isLoading || verificationCode.length !== 6}
-                  className="w-full py-3 px-4 flex items-center justify-center rounded-lg text-white font-medium transition-all text-base"
+                  className="w-full py-3 px-4 flex items-center justify-center rounded-lg text-white font-medium transition-all text-base mb-4"
                   style={{
                     backgroundColor:
-                      isLoading || verificationCode.length !== 6 ? `${COLORS.primary}60` : COLORS.primary,
+                      isLoading || verificationCode.length !== 6 ? `${COLORS.primary}80` : COLORS.primary,
                     cursor: isLoading || verificationCode.length !== 6 ? "not-allowed" : "pointer",
                   }}
                 >
                   {isLoading ? <RefreshCw className="w-5 h-5 animate-spin mr-2" /> : "Verify Code"}
                 </button>
-                <div className="text-center mt-6">
+                <div className="text-center">
                   <button
                     type="button"
                     onClick={handleResendCode}
                     disabled={!canResend || isLoading}
                     className="text-sm font-medium transition-all"
                     style={{
-                      color: canResend && !isLoading ? COLORS.secondary : `${COLORS.secondary}60`,
+                      color: canResend && !isLoading ? COLORS.accent : `${COLORS.accent}60`,
                       cursor: canResend && !isLoading ? "pointer" : "not-allowed",
                     }}
                   >
-                    {canResend ? "Resend Code" : `Resend code in ${countdown}s`}
+                    {canResend ? (
+                      "Resend Code"
+                    ) : (
+                      <span>
+                        Resend code in <span style={{ color: COLORS.primary }}>{countdown}s</span>
+                      </span>
+                    )}
                   </button>
                 </div>
               </form>
@@ -423,14 +458,14 @@ const Verification = () => {
                   Verification Successful!
                 </h2>
                 <p className="text-sm sm:text-base text-center mb-6" style={{ color: COLORS.lightText }}>
-                  Your email has been verified successfully. You can now access all features.
+                  Your account has been successfully verified.
                 </p>
                 <button
                   onClick={handleContinue}
-                  className="w-full py-3 px-4 rounded-lg text-white font-medium transition-all text-base"
+                  className="w-full py-3 px-4 rounded-lg text-white font-medium transition-all text-base hover:opacity-90"
                   style={{
-                    background: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.secondary})`,
-                    boxShadow: "0 4px 14px rgba(15, 76, 129, 0.25)",
+                    background: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.accent})`,
+                    boxShadow: "0 4px 14px rgba(46, 139, 87, 0.25)",
                   }}
                 >
                   Continue to Dashboard
@@ -447,7 +482,7 @@ const Verification = () => {
         >
           <p className="flex items-center justify-center">
             <Shield className="w-3 h-3 mr-1" />
-            Secured by Arigo.ng Authentication
+            Secured by EcoVerse Authentication
           </p>
         </div>
       </motion.div>
