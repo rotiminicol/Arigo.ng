@@ -38,7 +38,7 @@ const DeviceConvergenceLoader = ({ message = "Bringing your tech together..." })
         {/* Logo */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900">
-            Arigo<span className="text-green-600">.ng</span>
+            Arigo<span className="text-green-600">hub</span>
           </h1>
           <p className="text-lg text-gray-500 mt-2">Nigerias #1 Gadget Store</p>
         </div>
